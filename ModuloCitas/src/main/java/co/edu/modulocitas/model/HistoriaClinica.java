@@ -1,9 +1,7 @@
 package co.edu.modulocitas.model;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
