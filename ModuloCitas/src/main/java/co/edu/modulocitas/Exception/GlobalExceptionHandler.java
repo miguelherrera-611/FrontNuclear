@@ -27,4 +27,12 @@ public class GlobalExceptionHandler {
         error.put("mensaje", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(VeterinarioNoDisponible.class)
+    public ResponseEntity<Map<String, String>> manejarRecursoOcupado(VeterinarioNoDisponible ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Veterinario ocupado");
+        error.put("mensaje", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }
