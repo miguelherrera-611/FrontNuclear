@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¡Gracias por tu compra!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #28a745;
+    }
+
+    .producto {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>¡Gracias por tu compra! 🐶🐱</h1>
+    <p>Hemos recibido tu pago correctamente.</p>
+
+    <div id="lista-productos"></div>
+    <div class="total" id="total"></div>
+
+    <a class="volver" href="/">Volver a la tienda</a>
+  </div>
+
+  <script>
+    function getCarritoDesdeURL() {
+      const params = new URLSearchParams(window.location.search);
+      const carritoRaw = params.get('carrito');
+      try {
+        return JSON.parse(decodeURIComponent(carritoRaw));
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function mostrarProductos(carrito) {
+      const contenedor = document.getElementById('lista-productos');
+      let total = 0;
+
+      carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+
+        const div = document.createElement('div');
+        div.className = 'producto';
+        div.innerHTML = `
+          <span>${item.nombre} (x${item.cantidad})</span>
+          <span>$${subtotal.toLocaleString('es-CO')}</span>
+        `;
+        contenedor.appendChild(div);
+      });
+
+      document.getElementById('total').textContent = `Total: $${total.toLocaleString('es-CO')}`;
+    }
+
+    const carrito = getCarritoDesdeURL();
+    if (carrito.length) {
+      mostrarProductos(carrito);
+    } else {
+      document.getElementById('lista-productos').innerHTML = '<p>No se pudieron cargar los productos.</p>';
+    }
+  </script>
+</body>
+</html>
