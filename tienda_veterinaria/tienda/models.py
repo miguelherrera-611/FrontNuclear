@@ -13,6 +13,7 @@ class Producto(models.Model):
 class Carrito(models.Model):
     productos = models.ManyToManyField(Producto, through='CarritoProducto')
     creado_en = models.DateTimeField(auto_now_add=True)
+    link_pago = models.URLField(blank=True, null=True) 
 
     def __str__(self):
         return f"Carrito {self.id}"

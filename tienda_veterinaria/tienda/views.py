@@ -1,8 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
-from .models import Carrito, CarritoProducto, Producto
-from .serializers import CarritoSerializer, CarritoProductoSerializer, ProductoSerializer
+from .models import Producto, Carrito, CarritoProducto
+from .serializers import ProductoSerializer, CarritoSerializer, CarritoProductoSerializer
+from .utils import generar_link_pago
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -12,24 +14,17 @@ class CarritoViewSet(viewsets.ModelViewSet):
     queryset = Carrito.objects.all()
     serializer_class = CarritoSerializer
 
-    def create(self, request, *args, **kwargs):
-        carrito = Carrito.objects.create()
-        return Response({"id": carrito.id}, status=status.HTTP_201_CREATED)
+    @action(detail=True, methods=['post'])
+    def generar_pago(self, request, pk=None):
+        try:
+            carrito = Carrito.objects.get(pk=pk)
+            link_pago = generar_link_pago(carrito.id)
+            carrito.link_pago = link_pago
+            carrito.save()
+            return Response({"link_pago": link_pago}, status=status.HTTP_200_OK)
+        except Carrito.DoesNotExist:
+            return Response({"error": "Carrito no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
 class CarritoProductoViewSet(viewsets.ModelViewSet):
     queryset = CarritoProducto.objects.all()
     serializer_class = CarritoProductoSerializer
-
-    def create(self, request, *args, **kwargs):
-        carrito_id = request.data.get('carrito')
-        producto_id = request.data.get('producto')
-        cantidad = request.data.get('cantidad', 1)
-
-        carrito = Carrito.objects.get(id=carrito_id)
-        producto = Producto.objects.get(id=producto_id)
-
-        carrito_producto, created = CarritoProducto.objects.get_or_create(carrito=carrito, producto=producto)
-        carrito_producto.cantidad = cantidad
-        carrito_producto.save()
-
-        return Response(CarritoProductoSerializer(carrito_producto).data, status=status.HTTP_201_CREATED)
