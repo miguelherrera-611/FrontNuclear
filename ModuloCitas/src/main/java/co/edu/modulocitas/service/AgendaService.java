@@ -5,6 +5,7 @@ import co.edu.modulocitas.model.Cita;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +17,8 @@ public interface AgendaService {
     Optional<Cita> cambiarEstado(int idCita, Estado estado);
     List<Cita> consultarCitaPorEstado(Estado estado);
     List<Cita> consultarCitaPorFecha(LocalDate fecha);
-    List<Cita> consultarCitaPorHora(Time hora);
-    List<Cita> consultarCitaPorFechaYHora(LocalDate fecha, Time hora);
+    List<Cita> consultarCitaPorHora(LocalTime hora);
+    List<Cita> consultarCitaPorFechaYHora(LocalDate fecha, LocalTime hora);
     List<Cita> consultarCitaPorVeterinario(String idVeterinario);
     List<Cita> consultarCitaPorPaciente(String idPaciente);
 }

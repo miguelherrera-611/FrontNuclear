@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ public class Cita {
     private String idPaciente;
     private String idVeterinario;
     private LocalDate fecha;
-    private Time hora;
+    private LocalTime hora;
     private boolean esUrgencia;
     private String motivo;
 
