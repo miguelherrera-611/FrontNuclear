@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,12 +57,12 @@ public class AgendaController {
     }
 
     @GetMapping("/cita/hora/{hora}")
-    public List<Cita> consultarCitaPorHora(@PathVariable Time Hora) {
+    public List<Cita> consultarCitaPorHora(@PathVariable LocalTime Hora) {
         return agendaService.consultarCitaPorHora(Hora);
     }
 
     @GetMapping("/cita/fechaYhora/{fecha}/{hora}")
-    public List<Cita> consultarCitaPorFechaYHora(@PathVariable LocalDate fecha, @PathVariable Time hora) {
+    public List<Cita> consultarCitaPorFechaYHora(@PathVariable LocalDate fecha, @PathVariable LocalTime hora) {
         return agendaService.consultarCitaPorFechaYHora(fecha, hora);
     }
 
