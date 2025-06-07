@@ -8,9 +8,11 @@ import co.edu.modulocitas.enums.Estado;
 import co.edu.modulocitas.model.Cita;
 import co.edu.modulocitas.model.Servicio;
 import co.edu.modulocitas.repository.CitaRepository;
+import co.edu.modulocitas.request.NotificacionRequest;
 import co.edu.modulocitas.service.AgendaService;
 import co.edu.modulocitas.service.ServicioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,7 +30,9 @@ public class AgendaServiceImpl implements AgendaService {
 
     private final CitaRepository citaRepository;
     private final ServicioService servicioService;
-    private final WebClient webClient;
+    private final NotificacionesService notificacionesService;
+    private final UsuarioServiceImpl usuarioServiceImpl;
+
 
     List<Estado> estadosOcupados = List.of(Estado.PROGRAMADA, Estado.ATENDIDA, Estado.EN_CURSO);
 
@@ -48,8 +52,9 @@ public class AgendaServiceImpl implements AgendaService {
         Servicio servicio = validarYObtenerServicio(cita.getServicio().getId());
         validarVeterinarioDisponible(cita.getIdVeterinario(), cita.getFecha(), cita.getHora());
         validarPacienteDisponible(cita.getIdPaciente(), cita.getFecha(), cita.getHora());
-        verificarDisponibilidadVeterinario(cita.getIdVeterinario(), cita.getFecha(),cita.getHora());
+        usuarioServiceImpl.verificarDisponibilidadVeterinario(cita.getIdVeterinario(), cita.getFecha(),cita.getHora());
         cita.setServicio(servicio);
+        notificarCita(cita);
 
         return citaRepository.save(cita);
 
@@ -77,31 +82,6 @@ public class AgendaServiceImpl implements AgendaService {
                 });
     }
 
-    // Metodo que consulta a otro microservicio si un veterinario está disponible en una fecha y hora específicas.
-    public void verificarDisponibilidadVeterinario(String veterinarioId, LocalDate fecha, LocalTime hora) {
-
-            // Realiza una solicitud HTTP GET al endpoint del microservicio de usuarios
-        Map<String, Object> response = webClient.get() // Inicia la construcción de una petición GET con WebClient
-                .uri(uriBuilder -> uriBuilder              // Usa un uriBuilder para construir dinámicamente la URL
-                        .path("/verificar/{veterinarioId}")    // Define el path del endpoint con un parámetro
-                        .queryParam("fecha", fecha)            // Agrega el parámetro de la fecha (en formato ISO)
-                        .queryParam("hora", hora)              // Agrega el parámetro de la hora (en formato HH:mm)
-                        .build(veterinarioId))                 // Sustituye el {veterinarioId} en la URL con el valor real
-                .retrieve()                                // Ejecuta la solicitud HTTP y obtiene la respuesta
-                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {}) // Convierte la respuesta a un Mono de tipo Map<String, Object>
-                .block();                                  // Bloquea hasta recibir la respuesta (de forma sincrónica)
-
-        // Si la respuesta no es nula y contiene la clave "disponible"
-//            if (response != null && response.containsKey("disponible")) {
-//                // Devuelve true si el valor de "disponible" es true, de lo contrario false
-//                return Boolean.TRUE.equals(response.get("disponible"));
-        if (response == null || !Boolean.TRUE.equals(response.get("disponible"))) {
-            throw new VeterinarioNoDisponible("El veterinario no está disponible en ese horario");
-        }
-
-
-
-    }
 
 
     @Override
@@ -171,6 +151,26 @@ public class AgendaServiceImpl implements AgendaService {
         return servicioService.consultarServicioPorId(servicioId)
                 .orElseThrow(() -> new RecursoNoEncontradoExcepcion("El servicio con ID " + servicioId + " no existe. No se puede crear la cita."));
     }
+
+    private void notificarCita(Cita cita) {
+        NotificacionRequest request = new NotificacionRequest();
+        request.setTipo("Cita");
+        request.setMensaje("Su cita ha sido programada para el " + cita.getFecha() + " a las " + cita.getHora());
+        String email = usuarioServiceImpl.obtenerEmail(cita.getIdPaciente());
+        request.setDestinatario(email);
+
+        if (request.getDestinatario() == null || !request.getDestinatario().contains("@")) {
+            System.err.println("Email destinatario no válido: {}" + request.getDestinatario());
+            return;
+        }
+
+        if (request.getMensaje() == null || request.getMensaje().trim().isEmpty()) {
+            System.err.println("Mensaje vacío");
+            return;
+        }
+        notificacionesService.enviarNotificacion(request);
+    }
+
 
 }
 

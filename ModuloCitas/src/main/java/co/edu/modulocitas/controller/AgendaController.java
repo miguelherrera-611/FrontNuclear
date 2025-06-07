@@ -75,4 +75,6 @@ public class AgendaController {
     public List<Cita> consultarCitaPorPaciente(@PathVariable String idPaciente) {
         return agendaService.consultarCitaPorPaciente(idPaciente);
     }
+
+
 }
