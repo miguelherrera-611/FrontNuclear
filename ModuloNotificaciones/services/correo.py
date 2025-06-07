@@ -12,6 +12,8 @@ REMITENTE = os.getenv("EMAIL_REMITENTE")
 CLAVE_APP = os.getenv("EMAIL_CLAVE_APP")
 
 def enviar_correo(destinatario, asunto, mensaje):
+
+    print(f"Enviando correo a {destinatario} con asunto '{asunto}'")
     msg = MIMEMultipart()
     msg['From'] = REMITENTE
     msg['To'] = destinatario

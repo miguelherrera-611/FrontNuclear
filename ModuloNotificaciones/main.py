@@ -11,6 +11,9 @@ class Notificacion(BaseModel):
 
 @app.post("/notificar")
 def notificar(data: Notificacion):
+    print(f"Recibida notificación: {data.tipo}, mensaje: {data.mensaje}, destinatario: {data.destinatario}")
+    if not data.destinatario or not data.mensaje:
+        raise HTTPException(status_code=400, detail="Destinatario y mensaje son obligatorios")
     try:
         if data.tipo == "pago":
             enviar_correo(data.destinatario, "Pago exitoso", data.mensaje)
