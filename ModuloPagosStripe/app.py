@@ -5,6 +5,7 @@ import json
 from urllib.parse import quote
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv()
 app = Flask(__name__)
@@ -15,6 +16,7 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 def crear_sesion_pago():
     data = request.json
     carrito = data.get('carrito', [])
+    correo_usuario = data.get('correo_usuario', None)
 
     if not carrito:
         return jsonify({'error': 'El carrito está vacío'}), 400
@@ -49,9 +51,27 @@ def crear_sesion_pago():
             cancel_url='http://localhost:5500/cancel.html',
         )
 
+        if correo_usuario :
+            mensaje = f"Pago exitoso por {sum(item['precio'] * item.get('cantidad', 1) for item in carrito)} COP"
+            notificar_pago_exitoso(correo_usuario, mensaje)
+
         return jsonify({'url': session.url})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+def notificar_pago_exitoso(destinatario, mensaje):
+    url = 'http://localhost:8000/notificar'  # Cambia esto si usas Docker u otra IP
+    data = {
+        "tipo": "pago",
+        "mensaje": mensaje,
+        "destinatario": destinatario
+    }
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        print("Notificación enviada con éxito")
+    except requests.exceptions.RequestException as e:
+        print(f"Error al enviar la notificación: {e}")
 
 if __name__ == '__main__':
     app.run(port=5000)
