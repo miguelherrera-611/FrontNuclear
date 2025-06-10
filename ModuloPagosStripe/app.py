@@ -40,7 +40,7 @@ def crear_sesion_pago():
         carrito_json = json.dumps(carrito)
         carrito_codificado = quote(carrito_json)
 
-        # Reemplaza esta URL con la de tu frontend real si es distinto
+        # Reemplaza esta URL con la de tu frontend real
         success_url = f'http://localhost:5500/success.html?carrito={carrito_codificado}'
 
         session = stripe.checkout.Session.create(
