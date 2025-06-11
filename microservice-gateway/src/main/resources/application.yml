@@ -1,0 +1,46 @@
+server:
+  port: 9000
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/.well-known/jwks.json
+  cloud:
+    gateway:
+      routes:
+        - id: usuarios
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/usuarios/**
+          filters:
+            - StripPrefix=2
+
+        - id: ModuloCitas
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/modulo_citas/**
+          filters:
+            - StripPrefix=2
+
+        - id: ModuloPagosStripe
+          uri: http://localhost:5500
+          predicates:
+            - Path=/api/pagos/**
+          filters:
+            - StripPrefix=2
+
+        - id: tienda
+          uri: http://localhost:5050
+          predicates:
+            - Path=/api/tienda/**
+          filters:
+            - StripPrefix=2
+
+        - id: notificaciones
+          uri: http://localhost:8000
+          predicates:
+            - Path=/api/notificaciones/**
+          filters:
+            - StripPrefix=2
