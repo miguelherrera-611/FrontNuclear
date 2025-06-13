@@ -61,4 +61,37 @@ public class UsuarioServiceImpl {
         }
     }
 
+    public String obtenerNombreMascota(String idMascota) {
+         try {
+             String nombre = usuarioWebClient.get()
+                     .uri(uriBuilder -> uriBuilder
+                             .path("/mascotas/nombre/{idMascota}")
+                             .build(idMascota))
+                     .retrieve()
+                     .bodyToMono(String.class)
+                     .block(); // Espera sincrónicamente la respuesta
+             System.out.println(nombre);
+             return nombre;
+         } catch (Exception e) {
+             System.err.println("Error al obtener el nombre de la mascota: " + e.getMessage());
+             return null;
+         }
+    }
+
+    public String obtenerNombreVeterinario(String idVeterinario) {
+        try {
+            String nombre = usuarioWebClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/veterinarios/nombre/{idVeterinario}")
+                            .build(idVeterinario))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block(); // Espera sincrónicamente la respuesta
+            System.out.println(nombre);
+            return nombre;
+        } catch (Exception e) {
+            System.err.println("Error al obtener el nombre del veterinario: " + e.getMessage());
+            return null;
+        }
+    }
 }

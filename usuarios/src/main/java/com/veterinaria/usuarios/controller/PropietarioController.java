@@ -189,4 +189,18 @@ public class PropietarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/buscarEmail/id/{id}")
+    public ResponseEntity<String> obtenerEmail(@PathVariable String id) {
+        return propietarioService.findById(id)
+                .map(propietario -> ResponseEntity.ok(propietario.getEmail()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/buscarEmail/idMascota/{idMascota}")
+    public String obtenerMascotaPorId(@PathVariable String idMascota) {
+        return propietarioService.buscarEmailPorMascotaId(idMascota);
+    }
+
+
 }

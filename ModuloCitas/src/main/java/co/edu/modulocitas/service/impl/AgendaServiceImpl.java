@@ -11,6 +11,7 @@ import co.edu.modulocitas.repository.CitaRepository;
 import co.edu.modulocitas.request.NotificacionRequest;
 import co.edu.modulocitas.service.AgendaService;
 import co.edu.modulocitas.service.ServicioService;
+import feign.Request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -154,10 +155,31 @@ public class AgendaServiceImpl implements AgendaService {
 
     private void notificarCita(Cita cita) {
         NotificacionRequest request = new NotificacionRequest();
-        request.setTipo("Cita");
-        request.setMensaje("Su cita ha sido programada para el " + cita.getFecha() + " a las " + cita.getHora());
+
         String email = usuarioServiceImpl.obtenerEmail(cita.getIdPaciente());
+        String nombreMascota = usuarioServiceImpl.obtenerNombreMascota(cita.getIdPaciente());
+        String nombreVeterinario = usuarioServiceImpl.obtenerNombreVeterinario(cita.getIdPaciente());
+
+        request.setTipo("Cita");
         request.setDestinatario(email);
+        String mensaje = String.format(
+                "¡Hola! 😊\n\n" +
+                        "A agendado %s para su mascota *%s* exitosamente.\n\n" +
+                        "📅 Fecha: %s\n" +
+                        "⏰ Hora: %s\n" +
+                        "👨‍⚕️ Veterinario asignado: Dr. %s\n" +
+                        "Duracion:%s\n\n"+
+                        "Por favor asegúrese de llegar con 10 minutos de anticipación. Si necesita reprogramar, contáctenos a la brevedad.\n\n" +
+                        "¡Gracias por confiar en nosotros! 🐾\n\n\n\n" +
+                        "Mensaje generado automaticamente, por favor no respoder este correo.",
+                cita.getServicio().getTipo(),
+                nombreMascota,
+                cita.getFecha().toString(),
+                cita.getHora().toString(),
+                nombreVeterinario,
+                cita.getServicio().getDuracion()
+        );
+        request.setMensaje(mensaje);
 
         if (request.getDestinatario() == null || !request.getDestinatario().contains("@")) {
             System.err.println("Email destinatario no válido: {}" + request.getDestinatario());
@@ -168,8 +190,11 @@ public class AgendaServiceImpl implements AgendaService {
             System.err.println("Mensaje vacío");
             return;
         }
+
+
         notificacionesService.enviarNotificacion(request);
     }
+
 
 
 }

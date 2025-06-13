@@ -1,6 +1,7 @@
 package com.veterinaria.usuarios.controller;
 
 import com.veterinaria.usuarios.dto.MascotaDTO;
+import com.veterinaria.usuarios.model.Mascota;
 import com.veterinaria.usuarios.service.MascotaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mascotas")
@@ -69,6 +71,17 @@ public class MascotaController {
             mascotaService.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/nombre/{id}")
+    public ResponseEntity<String> findNombreById(@PathVariable String id) {
+
+        try{
+            Optional<MascotaDTO> mascota = mascotaService.findById(id);
+            return ResponseEntity.ok(mascota.get().getNombre());
+        }catch (Exception e){
             return ResponseEntity.notFound().build();
         }
     }

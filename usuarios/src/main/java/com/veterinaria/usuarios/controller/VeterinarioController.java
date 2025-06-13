@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/veterinarios")
@@ -59,5 +62,15 @@ public class VeterinarioController {
     public ResponseEntity<Void> deleteVeterinario(@PathVariable String id) {
         veterinarioService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/nombre/{id}")
+    public ResponseEntity<String> getNombreVeterinariosById(@PathVariable String id) {
+        Optional<Veterinario> veterinario = veterinarioService.findById(id);
+        if (veterinario.isPresent()) {
+            return ResponseEntity.ok(veterinario.get().getNombre());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
