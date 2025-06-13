@@ -65,10 +65,10 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
     @Override
     public boolean isVeterinarioDisponible(String veterinarioId, LocalDate fecha, LocalTime hora) {
         try {
-            DayOfWeek diaSemana = fecha.getDayOfWeek();
-
+            String diaSemana = fecha.getDayOfWeek().name();
+            System.out.println(diaSemana);
             List<Disponibilidad> disponibilidades = disponibilidadRepository
-                    .findByVeterinarioIdAndDiaSemanaAndActivoTrue(veterinarioId, diaSemana.getValue());
+                    .findByVeterinarioIdAndDiaSemanaAndActivoTrue(veterinarioId, diaSemana);
 
             if (disponibilidades.isEmpty()) {
                 return false;
@@ -93,8 +93,8 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
 
     @Override
     public List<Disponibilidad> getDisponibilidadesPorDia(String veterinarioId, LocalDate fecha) {
-        DayOfWeek diaSemana = fecha.getDayOfWeek();
+        String diaSemana = fecha.getDayOfWeek().name();
         return disponibilidadRepository
-                .findByVeterinarioIdAndDiaSemanaAndActivoTrue(veterinarioId, diaSemana.getValue());
+                .findByVeterinarioIdAndDiaSemanaAndActivoTrue(veterinarioId, diaSemana);
     }
 }

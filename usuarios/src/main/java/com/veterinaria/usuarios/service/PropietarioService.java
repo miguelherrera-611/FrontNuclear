@@ -38,4 +38,7 @@ public interface PropietarioService {
     boolean existePorEmail(String email);
 
     boolean existePorTelefono(String telefono);
+
+    String buscarPropietarioPorMascotaId(String id);
+    String buscarEmailPorMascotaId(String id);
 }
