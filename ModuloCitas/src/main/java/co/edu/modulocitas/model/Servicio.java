@@ -15,7 +15,7 @@ public class Servicio {
 
     private String tipo;
     private String descripcion;
-    private Duration duracion;
+    private int duracion;
     private String requisitos;
 
 }
