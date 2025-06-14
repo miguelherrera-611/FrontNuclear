@@ -37,7 +37,7 @@ public class AgendaController {
     }
 
     @PutMapping("/estado/cita/{idCita}")
-    public Optional<Cita> cambiarEstado(@PathVariable int idCita, @RequestParam Estado estado) {
+    public Optional<Cita> cambiarEstado(@PathVariable int idCita, @RequestBody Estado estado) {
         return agendaService.cambiarEstado(idCita, estado);
     }
 

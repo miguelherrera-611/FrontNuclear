@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,7 @@ public class HistoriaClinica {
     private Integer id;
 
     private LocalDate fecha;
-    private Time hora;
+    private LocalTime hora;
 
     private Integer idCita;
     private String idVeternario;
