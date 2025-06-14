@@ -26,4 +26,15 @@ public class NotificacionesService {
                 .subscribe(); // Ejecuta la llamada en modo reactivo
     }
 
+    public void enviarNotificacionConAdjunto(NotificacionRequest request) {
+        notificacionesWebClient.post()
+                .uri("/notificar/adjunto") // Usa el path relativo correcto si tienes baseUrl
+                .bodyValue(request)            // Forma más limpia y moderna de enviar el body
+                .retrieve()
+                .bodyToMono(Void.class)
+                .doOnSuccess(v -> System.out.println("Notificación enviada con éxito"))
+                .doOnError(e -> System.err.println("Error al enviar notificación: " + e.getMessage()))
+                .subscribe(); // Ejecuta la llamada en modo reactivo
+    }
+
 }
