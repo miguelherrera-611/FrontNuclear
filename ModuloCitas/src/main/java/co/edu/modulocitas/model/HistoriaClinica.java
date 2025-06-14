@@ -20,7 +20,7 @@ public class HistoriaClinica {
     private LocalTime hora;
 
     private Integer idCita;
-    private String idVeternario;
+    private String idVeterinario;
     private String idPaciente;
 
     private String motivo;

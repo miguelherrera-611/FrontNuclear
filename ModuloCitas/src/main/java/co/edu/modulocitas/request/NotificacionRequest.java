@@ -9,4 +9,6 @@ public class NotificacionRequest {
     private String tipo;
     private String mensaje;
     private String destinatario;
+    private String adjunto;
+    private String nombreAdjunto;
 }

@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface HistoriaClinicaRepository extends JpaRepository<HistoriaClinica, Integer> {
 
     Optional<HistoriaClinica> findHistoriaClinicaByIdPaciente(String idPaciente);
-    Optional<HistoriaClinica> findHistoriaClinicaByIdVeternario (String idVeternario);
+    Optional<HistoriaClinica> findHistoriaClinicaByIdVeterinario (String idVeterinario);
 }

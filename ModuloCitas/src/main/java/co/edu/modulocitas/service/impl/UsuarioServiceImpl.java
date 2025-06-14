@@ -70,7 +70,7 @@ public class UsuarioServiceImpl {
                      .retrieve()
                      .bodyToMono(String.class)
                      .block(); // Espera sincrónicamente la respuesta
-             System.out.println(nombre);
+             System.out.println("Mascota:" +nombre);
              return nombre;
          } catch (Exception e) {
              System.err.println("Error al obtener el nombre de la mascota: " + e.getMessage());
@@ -87,7 +87,8 @@ public class UsuarioServiceImpl {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block(); // Espera sincrónicamente la respuesta
-            System.out.println(nombre);
+            System.out.println("Veterinario:" +idVeterinario);
+            System.out.println("Veterinario"+ nombre);
             return nombre;
         } catch (Exception e) {
             System.err.println("Error al obtener el nombre del veterinario: " + e.getMessage());
