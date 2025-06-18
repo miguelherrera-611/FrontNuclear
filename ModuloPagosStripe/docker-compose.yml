@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    env_file:
+      - .env
+    volumes:
+      - ./success.html:/app/success.html
+    restart: unless-stopped

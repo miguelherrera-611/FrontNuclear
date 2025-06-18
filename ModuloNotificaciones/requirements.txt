@@ -2,4 +2,8 @@ fastapi==0.115.12
 uvicorn==0.34.3
 python-dotenv==1.1.0
 pydantic==2.11.5
-starlette==0.46.2
+#starlette==0.46.2
+# Para envío de emails
+aiosmtplib==3.0.1
+# Si prefieres usar smtplib síncrono:
+# smtplib viene incluido en Python estándar
