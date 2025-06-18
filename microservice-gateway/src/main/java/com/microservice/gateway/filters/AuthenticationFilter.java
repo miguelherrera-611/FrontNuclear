@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+
 import io.jsonwebtoken.Claims;
+
+import java.util.List;
 
 @Component
 public class AuthenticationFilter implements GatewayFilter {
@@ -17,13 +20,26 @@ public class AuthenticationFilter implements GatewayFilter {
     private final JwtUtil jwtUtil;
     private final AuthorizationRules authorizationRules;
 
+    List<String> publicPaths = List.of(
+            "/api/auth/login",
+            "/api/auth/register",
+            "/api/productos/lista"
+    );
+
     public AuthenticationFilter(JwtUtil jwtUtil, AuthorizationRules authorizationRules) {
         this.jwtUtil = jwtUtil;
         this.authorizationRules = authorizationRules;
     }
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain)  {
+
+        String requestPath = exchange.getRequest().getPath().toString();
+
+        if (publicPaths.stream().anyMatch(requestPath::startsWith)) {
+            return chain.filter(exchange); // Dejar pasar sin validar JWT
+        }
+
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

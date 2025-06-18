@@ -2,6 +2,8 @@ server:
   port: 9000
 
 spring:
+  main:
+    web-application-type: reactive
   application:
     name: api-gateway
 
@@ -17,12 +19,14 @@ spring:
           predicates:
             - Path=/api/productos/**
         - id: ModuloPagosStripe
-          uri: lb://
+          uri: lb://moduloPagos
           predicates:
             - Path=/api/pagos/**
         - id: ModuloCitas
           uri: lb://modulo_citas
           predicates:
-            -Path=/api/modulo_citas/**
+            - Path=/api/modulo_citas/**
         - id: ModuloNotificaciones
           uri: lb://ModuloNotificaciones
+          predicates:
+            - Path=/api/notificaciones/**

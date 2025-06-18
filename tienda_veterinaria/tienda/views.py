@@ -37,11 +37,11 @@ class CarritoViewSet(viewsets.ModelViewSet):
             # Datos para enviar al módulo de pagos
             payload = {
                 'carrito': carrito_data,
-                'correo_usuario': "nmorales_6@cue.edu.co"
+                'correo_usuario': ""
             }
 
             # URL del módulo de pagos
-            URL_PAGO # Ajusta la URL según tu configuración
+            URL_PAGO
 
             # Hacer la petición al módulo de pagos
             response = requests.post(
