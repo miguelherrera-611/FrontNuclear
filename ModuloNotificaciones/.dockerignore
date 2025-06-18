@@ -1,0 +1,68 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+.env.local
+.env.development
+.env.test
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# FastAPI específico
+.pytest_cache/
+
+# IDE y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*vim
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+
+# Documentación
+README.md
+docs/
+*.md
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Variables de entorno de ejemplo (no la real)
+.env.example
+
+# Archivos de respaldo
+*.bak
+*.backup

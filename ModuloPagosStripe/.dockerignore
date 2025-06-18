@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Variables de entorno (importante para seguridad)
+.env.local
+.env.development
+.env.test
+
+# Logs
+*.log
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Archivos temporales
+*.tmp
