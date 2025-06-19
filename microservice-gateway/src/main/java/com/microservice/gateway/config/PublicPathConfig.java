@@ -6,9 +6,9 @@ import java.util.List;
 @Component
 public class PublicPathConfig {
     private final List<String> publicPaths = List.of(
-            "/api/usuarios/login",
-            "/api/usuarios/registro",
-            "/api/productos/lista"
+            "/api/auth/login",
+            "/api/auth/register",
+            "/api/productos"
     );
 
     public boolean isPublic(String path) {

@@ -16,13 +16,13 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("usuarios", r -> r.path("/api/usuarios/**")
+                .route("usuarios", r -> r.path("/api/**")
                         .filters(f -> f.filter (authenticationFilter))
                         .uri("http://localhost:8080"))
                 .route("tienda_veterinaria", r -> r.path("/api/tienda/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:5050"))
-                .route("ModuloCitas", r -> r.path("api/modulo_citas/**")
+                .route("ModuloCitas", r -> r.path("/agenda/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:8081"))
                 .route("ModuloPagosStripe", r -> r.path("/api/pagos/**")
