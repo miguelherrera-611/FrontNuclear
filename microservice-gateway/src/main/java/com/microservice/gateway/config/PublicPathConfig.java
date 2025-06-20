@@ -8,7 +8,7 @@ public class PublicPathConfig {
     private final List<String> publicPaths = List.of(
             "/api/auth/login",
             "/api/auth/register",
-            "/api/productos"
+            "/api/tienda/productos"
     );
 
     public boolean isPublic(String path) {
